@@ -38,4 +38,13 @@ const getItems = () =>
       });
   });
 
-module.exports = { newItem, getItems };
+const deleteItem = stamp =>
+  new Promise((resolve, reject) => {
+    db.remove({ stamp }, {}, (err) => {
+      if (err) {
+        reject(err);
+      }
+      resolve();
+    });
+  });
+module.exports = { newItem, getItems, deleteItem };
