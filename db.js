@@ -24,14 +24,18 @@ const newItem = item =>
     }));
 
 // Gets the items from the NeDB
-const getItems = new Promise((resolve, reject) => {
-  db.find({}, (err, items) => {
-    if (err) {
-      reject(err);
-      return;
-    }
-    resolve(items);
+const getItems = () =>
+  new Promise((resolve, reject) => {
+    db
+      .find({})
+      .sort({ stamp: 1 })
+      .exec((err, items) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(items);
+      });
   });
-});
 
 module.exports = { newItem, getItems };

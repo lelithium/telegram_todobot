@@ -27,11 +27,18 @@ bot.command('add', (ctx) => {
     .then(ctx.replyWithMarkdown(`Added item \`${text}\``))
     .catch(err => ctx.reply(`An error occured ${err}`));
 });
+
 bot.command('get', (ctx) => {
-  db.getItems
+  db
+    .getItems()
     .then((docs) => {
+      if (!docs) {
+        ctx.reply('No ToDo items !');
+        return;
+      }
       docs.forEach(item => ctx.reply(item.text));
     })
     .catch(err => ctx.reply(`An error occured ${err}`));
 });
+
 bot.startPolling();
