@@ -4,7 +4,7 @@ const Markup = require('telegraf/markup');
 
 const db = require('./db');
 
-const { TELEGRAM_TOKEN } = require('./secrets.js');
+const { TELEGRAM_TOKEN, TELEGRAM_USER } = require('./secrets.js');
 
 const bot = new Telegraf(TELEGRAM_TOKEN);
 
@@ -18,10 +18,14 @@ const addItem = (text) => {
   return db.newItem(item);
 };
 
-const formatItem = item => `${item.text} since ${item.stamp}`;
+const formatItem = item => `${item.text} since ${Date(item.stamp)}`;
 
 bot.start(ctx => ctx.reply('Welcome!'));
 bot.command('add', (ctx) => {
+  if (String(ctx.from.id) !== TELEGRAM_USER) {
+    ctx.reply('Wrong user ID');
+    return;
+  }
   const text = ctx.message.text
     .split(' ')
     .slice(1)
@@ -36,6 +40,10 @@ bot.command('add', (ctx) => {
 });
 
 bot.command('get', (ctx) => {
+  if (String(ctx.from.id) !== TELEGRAM_USER) {
+    ctx.reply('Wrong user ID');
+    return;
+  }
   db
     .getItems()
     .then((docs) => {
