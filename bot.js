@@ -18,7 +18,7 @@ const addItem = (text) => {
   return db.newItem(item);
 };
 
-const formatItem = item => `${item.text} since ${Date(item.stamp)}`;
+const formatItem = item => `${item.text} since ${Date(Number(item.stamp))} - ${item.stamp}`;
 
 bot.start(ctx => ctx.reply('Welcome!'));
 bot.command('add', (ctx) => {
