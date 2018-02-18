@@ -18,7 +18,12 @@ const addItem = (text) => {
   return db.newItem(item);
 };
 
-const formatItem = item => `${item.text} since ${(new Date(Number(item.stamp))).toString().split(" ").slice(0,-2).join(" ")} - ${item.stamp}`;
+const formatItem = item =>
+  `${item.text} since ${new Date(Number(item.stamp))
+    .toString()
+    .split(' ')
+    .slice(0, -2)
+    .join(' ')} - ${item.stamp}`;
 
 bot.start(ctx => ctx.reply('Welcome!'));
 bot.command('add', (ctx) => {
@@ -60,7 +65,6 @@ bot.action('done', (ctx) => {
   const stamp = ctx.callbackQuery.message.text.split(' ').slice(-1)[0];
   db.deleteItem(stamp).catch((err) => {
     ctx.reply(`An error occured ${err.text}`);
-    console.log(err);
   });
   return ctx.deleteMessage();
 });
